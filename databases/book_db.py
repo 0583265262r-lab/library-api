@@ -3,10 +3,10 @@ from databases.db_connection import *
 connection1 = DBConnection()
 class BookDB:
     def __init__(self):
-        self.conn = connection1.get_connection()
+        pass
     
     def create_book(self,data:dict)->None:
-        conn =self.conn()
+        conn = connection1.get_connection()
         cursor = conn.cursor()
         query = "INSERT INTO books (title,author, genre)VALUES(%s,%s,%s)"
         val = [val for val in data.values()]
@@ -23,7 +23,7 @@ class BookDB:
 
         
     def get_all_books(self):
-        conn =self.conn()
+        conn = connection1.get_connection()
         cursor = conn.cursor(dictionary=True)
         sql = "SELECT * FROM books"
         cursor.execute(sql)
@@ -33,7 +33,7 @@ class BookDB:
         return rows
         
     def get_book_by_id(self,id):
-        conn =self.conn()
+        conn =connection1.get_connection()
         cursor = conn.cursor(dictionary=True)
         sql = "SELECT * FROM books WHERE id =%s"
         cursor.execute(sql,(id,))
@@ -45,7 +45,7 @@ class BookDB:
         return row
 
     def update_book(self,id:int,data:dict):
-        conn =self.conn()
+        conn = connection1.get_connection()
         cursor = conn.cursor(dictionary=True)
         set_parts = []
         for key in data.keys():

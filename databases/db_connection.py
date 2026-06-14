@@ -2,9 +2,9 @@ import mysql.connector
 
 class DBConnection:
     def __init__(self):
-        self.host="localhost",
-        self.user="root",
-        self.password="secret",
+        self.host="localhost"
+        self.user="root"
+        self.password="secret"
         self.database="library_db"
     def get_connection(self):
         return mysql.connector.connect(
