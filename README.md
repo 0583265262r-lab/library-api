@@ -5,19 +5,18 @@
      לנהל את החברים המנויים בספרייה(הוספת חברים , השאלה והחזרת ספרים , והצגת התגובות ) וניהול ספרים(הוספה ומחיקת ספרים)
 מבנה תיקיות
 library-api/  
-│  
-├── app/  
-│   ├── main.py  
-│   ├── database/  
-│   │   ├── db_connection.py  
-│   │   ├── book_db.py  
-│   │   └── member_db.py  
-│   ├── routes/  
-│   │   ├── book_routes.py  
-│   │   ├── member_routes.py  
-│   │   └── report_routes.py  
-│   └── logs/  
-│       └── app.log  
+|
+├── main.py  
+├── database/  
+│   ├── db_connection.py  
+│   ├── book_db.py  
+│   └── member_db.py  
+├── routes/  
+│   ├── book_routes.py  
+│   ├── member_routes.py  
+│   └── report_routes.py  
+└── logs/  
+│   └── app.log  
 │  
 ├── README.md  
 ├── requirements.txt  
@@ -99,6 +98,11 @@ Must be verified both in addition (POST) and in update (PUT)
    - The server connects to MySQL
    - Creates tables if they don't exist
    - Starts the FastAPI server
+ <!-- **db_connection.py** -->
+- func `connection_get` 
+ - system creating connection to MySQL 
+- func `tables_create`
+ - system creating tables members and books if not exist
 <!-- ** OOP - MemberDB** -->
 - method `create_member(data)`
    - User sends POST request to `/members` with name and email
@@ -137,9 +141,34 @@ Must be verified both in addition (POST) and in update (PUT)
 - method `get_all_books()` 
    - user send GET request to `/books`
    - returns all books
-
+- method `get_book_by_id(id)`
+   - user send GET request to `/books/{id}`
+   - system returns one book by ID or None 
+- method `update_book(id, data)`
+   - user send PUT request to `/books/{id}` 
+   - system updating the book by id
+- method `set_available(id, val,member_id)`
+   - user send PUT request to:
+      `/books/{id}/return/{member_id}`
+      or to `/books/{id}/borrow/{member_id}`
+   - system updating `is_available` or `borrowed_by_member_id`
+- method `books_total_count()`
+   - user send GET request to `/reports/summary`
+   - system count all the books in the library
+- method `count_available_books()`
+   - user send GET request to `/reports/summary`
+   - system count all the books in the library with `is_available=True`
+- method `count_borrowed_books()`
+   - user send GET request to `/reports/summary`
+   - system count all the books in the library with `is_available=False`
+- method `count_by_genre(genre)`
+   - user send GET request to `/reports/books-by-genre`
+   - system count books by their genre
+- method `count_active_borrows_by_member(member_id)`
+   - user send PUT request to `/books/{id}/borrow/{member_id}`
+   - system Count how many books the member currently owns (to enforce Rule 7) — count books with `borrowed_by_member_id` compared to `id_member`
 <!-- **Borrowing a Book:** -->
-   - User sends PUT request to `/books/{id}/borrow/      {member_id}`
+   - User sends PUT request to `/books/{id}/borrow/{member_id}`
    - System checks if book exists
    - System checks if member exists and is active
    - System checks if book is available
@@ -147,7 +176,45 @@ Must be verified both in addition (POST) and in update (PUT)
    - Updates book: `is_available=False`, `borrowed_by_member_id=member_id`
    - Increments member's `total_borrows` by 1
    - Returns success message
+<!-- **creating a book** -->
+   - User sends POST request to `/books` with title and author and genre
+   - System creates book with `available_is=FALSE` and `id_member_by_borrowed=NULL`
 
+<!-- ** Endpoints ** -->
+<!-- BOOK -->
+- POST `/books`
+  - creating book
+- GET `/books`
+  - returns all books 
+- GET `/books/{id}`
+  - returns book by ID 
+- PUT `/books/{id}`
+  - update book by ID
+- PUT `/books/{id}/borrow/{member_id}`
+  - Borrowing a book to member
+- PUT `/books/{id}/return/{member_id}`
+  - returns book from member
+<!-- MEMBERS -->
+- POST `/members`
+  - creating member
+- GET `/members`
+  - returns all members
+- GET `/members/{id}`
+  - return member by ID
+- PUT `/members/{id}`
+  - update member 
+- PUT `/members/{id}/deactivate`
+  - Disabling member 
+- PUT `/members/{id}/activate`
+  - Activation member
+<!-- Reports -->
+- GET `/reports/summary`
+  - return General report
+- GET /reports/books-by-genre
+  - return book by genre 
+- GET /reports/top-member
+  - return most active member
+  
 
 
 
