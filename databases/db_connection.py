@@ -31,7 +31,7 @@ def create_tables():
                             "name VARCHAR(50) NOT NULL," \
                             "email VARCHAR(50) NOT NULL UNIQUE," \
                             "is_active BOOLEAN DEFAULT TRUE NOT NULL," \
-                            "total_borrows INT NOT NULL)"
+                            "total_borrows INT DEFAULT 0)"
 
         curser.execute(create_table_book)
         curser.execute(create_table_members)

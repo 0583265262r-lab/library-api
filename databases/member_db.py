@@ -21,7 +21,14 @@ class MemberDB:
 
         
     def get_all_members():
-        pass
+        conn = conn1.get_connection()
+        cursor = conn.cursor(dictionary=True)
+        sql = "SELECT * FROM members"
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        conn.close
+        cursor.close
+        return rows
     def get_member_by_id(id):
         pass
     def update_member(id,data):
