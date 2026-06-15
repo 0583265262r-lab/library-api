@@ -71,7 +71,7 @@ class BookDB:
         current_book = self.get_book_by_id(id) 
         if not current_book:
             raise "book not found"
-        borrowed_books = self.count_borrowed_books(member_id)
+        borrowed_books = self.count_active_borrows_by_member(member_id)
         if not val:
             if not current_book["is_available"]:
                 raise ValueError("Book isn't available")
@@ -111,8 +111,8 @@ class BookDB:
         conn.close()
         cursor.close()
         return books
-        pass
-    def count_borrowed_books(self,member_id):
+        
+    def count_active_borrows_by_member(self,member_id):
         conn = connection1.get_connection()
         cursor = conn.cursor(dictionary=True)
         try:
@@ -143,8 +143,17 @@ class BookDB:
         return books
         
         
-    def count_active_borrows_by_member(self,member_id):
-        pass
+    def count_borrowed_books(self):
+        conn = connection1.get_connection()
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT COUNT(id) AS borrowed_books FROM books WHERE is_available = FALSE"
+        cursor.execute(query)
+        books = cursor.fetchone()
+        conn.close()
+        cursor.close()
+        return books
+
+        
 
 if __name__ == "__main__":
     c1 = BookDB()
@@ -156,4 +165,6 @@ if __name__ == "__main__":
     # print(c1.count_borrowed_books(6))
     # print(c1.set_available(2,False,6))
     # print(c1.count_available())
-    print(c1.count_by_genre("Non-Fiction"))
+    # print(c1.count_by_genre("Non-Fiction"))
+    print(c1.count_borrowed_books())
+    # print(c1.count_total_books()[0]["number_of_books"])

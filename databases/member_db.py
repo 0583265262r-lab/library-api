@@ -126,6 +126,6 @@ if __name__ == "__main__":
     # print(c1.update_member(1,{"is_active":False}))
     # print(c1.deactivate_member(6))
     # print(c1.get_top_member())
-    # print(c1.count_active_members())
-    print(c1.get_member_by_id(1))
+    print(c1.count_active_members())
+    # print(c1.get_member_by_id(1))
 
