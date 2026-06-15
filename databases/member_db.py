@@ -38,7 +38,7 @@ class MemberDB:
         conn.close()
         cursor.close()
         if not member:
-            raise KeyError
+            raise f"{ValueError} member not found"
         return member
         
 
@@ -77,13 +77,46 @@ class MemberDB:
 
 
     def activate_member(self,id):
-        pass
+        conn = conn1.get_connection()
+        cursor = conn.cursor(dictionary=True)
+        query = "UPDATE members SET is_active = TRUE WHERE id = %s"
+        cursor.execute(query,(id,))
+        conn.commit()
+        changed = cursor.rowcount > 0
+        conn.close()
+        cursor.close()
+        if not changed:
+            raise ValueError
+        return {"activate":changed}
+    
     def increment_borrows(self,id):
+        conn = conn1.get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+
         pass
     def count_active_members(self):
+        conn = conn1.get_connection()
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT COUNT(is_active) AS active_members FROM members WHERE is_active = TRUE"
+        cursor.execute(query)
+        active_count = cursor.fetchone()
+        conn.close()
+        cursor.close()
+        return active_count
+
         pass
     def get_top_member(self):
-        pass
+        conn = conn1.get_connection()
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT MAX(total_borrows) AS top_member FROM members GROUP BY id "
+        cursor.execute(query)
+        max_member = cursor.fetchone()
+        conn.close()
+        cursor.close()
+        return max_member
+        
+
 
 
 
@@ -91,4 +124,8 @@ if __name__ == "__main__":
     c1 = MemberDB()
     # print(c1.create_member({"name":"avi","email":"hsgfhsf"}))
     # print(c1.update_member(1,{"is_active":False}))
-    print(c1.deactivate_member(6))
+    # print(c1.deactivate_member(6))
+    # print(c1.get_top_member())
+    # print(c1.count_active_members())
+    print(c1.get_member_by_id(1))
+

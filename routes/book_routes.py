@@ -1,7 +1,8 @@
 from fastapi import HTTPException,APIRouter
-from databases import book_db
+from databases import book_db,member_db
 from pydantic import BaseModel
 import uvicorn
+memberdb = member_db.MemberDB()
 bookdb = book_db.BookDB()
 router = APIRouter()
 class CreateBook(BaseModel):
@@ -48,7 +49,16 @@ def update_book_by_id(id:int,body:UpdateBook):
         raise HTTPException(status_code=404)
 
 @router.put("/books/{id}/borrow/{member_id} ")
-def borrowing_a_book_to_member(id,member_id):
+def borrowing_a_book_to_member(id:int,member_id:int):
+    try:
+        current_member = memberdb.get_member_by_id(member_id)
+        current_book = bookdb.get_book_by_id(id)
+    except:
+        raise HTTPException(status_code=404,)
+    
+    if 
+
+
     pass
 
 

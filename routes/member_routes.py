@@ -54,3 +54,11 @@ def deactivate_member(id:int):
     except :
         raise HTTPException(status_code=404)
     
+@router.put("/members/{id}/activate")
+def activate_member(id:int):
+    try:
+        update = memberdb.activate_member(id)
+        return update
+    except :
+        raise HTTPException(status_code=404)
+    

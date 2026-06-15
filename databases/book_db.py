@@ -41,7 +41,7 @@ class BookDB:
         conn.close()
         cursor.close()
         if not row:
-            raise KeyError
+            raise f"{ValueError} book not found"
         return row
 
     def update_book(self,id:int,data:dict):
@@ -65,13 +65,20 @@ class BookDB:
 
         
     def set_available(self,id,val,member_id):
+        conn = connection1.get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        
+
         pass
     def count_total_books(self):
         pass
     def count_available(self):
         pass
     def count_borrowed_books(self):
-        pass
+        conn = connection1.get_connection()
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT COUNT (borrowed_by_member_id) FROM books "
     def count_by_genre(self,genre):
         pass
     def count_active_borrows_by_member(self,member_id):
