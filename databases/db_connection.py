@@ -6,6 +6,7 @@ class DBConnection:
         self.user="root"
         self.password="secret"
         self.database="library_db"
+        
     def get_connection(self):
         return mysql.connector.connect(
             host = self.host,
@@ -31,7 +32,7 @@ def create_tables():
                             "name VARCHAR(50) NOT NULL," \
                             "email VARCHAR(50) NOT NULL UNIQUE," \
                             "is_active BOOLEAN DEFAULT TRUE NOT NULL," \
-                            "total_borrows INT DEFAULT 0)"
+                            "total_borrows INT NOT NULL DEFAULT 0)"
 
         curser.execute(create_table_book)
         curser.execute(create_table_members)
@@ -40,4 +41,4 @@ def create_tables():
         conn.close()
         return "The tables were created successfully."
     
-
+print(create_tables())
