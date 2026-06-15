@@ -24,7 +24,7 @@ def create_tables():
                             "title VARCHAR(50) NOT NULL," \
                             "author VARCHAR(50) NOT NULL," \
                             "genre ENUM('Fiction','Non-Fiction','Science','History','Other') NOT NULL," \
-                            "available_is BOOLEAN DEFAULT TRUE NOT NULL," \
+                            "is_available BOOLEAN DEFAULT TRUE NOT NULL," \
                             "borrowed_by_member_id INT NULL)"
 
         create_table_members = "CREATE TABLE IF NOT EXISTS members(" \
