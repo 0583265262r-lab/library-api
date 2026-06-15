@@ -40,5 +40,5 @@ def create_tables():
         curser.close()
         conn.close()
         return "The tables were created successfully."
-    
-print(create_tables())
+if __name__ == "__main__":    
+    print(create_tables())

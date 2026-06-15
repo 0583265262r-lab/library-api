@@ -12,7 +12,7 @@ class CreateBook(BaseModel):
 @router.post("/books")
 def create_book(data : CreateBook):
     try:
-        add_book = bookdb.create_book({"title":data.title,"author":data.author,"genre":data.genre})
+        add_book = bookdb.create_book(data.model_dump())
         return f"add book {add_book} was success "
     except: 
         raise HTTPException(status_code=404)
@@ -29,7 +29,8 @@ def get_book_by_id(id:int):
     try:
         return bookdb.get_book_by_id(id)
     except:
-        raise HTTPException(status_code=404,detail="id not found")
+        raise HTTPException(status_code=404,detail="book not found")
+    
 class UpdateBook(BaseModel):
         title: str |None = None
         author: str |None = None
@@ -38,12 +39,17 @@ class UpdateBook(BaseModel):
         borrowed_by_member_id: int |None = None
 
 @router.put("/books/{id}")
-def update_book_by_id(id:int,data:UpdateBook):
+def update_book_by_id(id:int,body:UpdateBook):
     try:
+        data = body.model_dump(exclude_unset=True)
         update = bookdb.update_book(id,data)
         return update
-    except:
+    except :
         raise HTTPException(status_code=404)
+
+@router.put("/books/{id}/borrow/{member_id} ")
+def borrowing_a_book_to_member(id,member_id):
+    pass
 
 
 if __name__ == "__main__":

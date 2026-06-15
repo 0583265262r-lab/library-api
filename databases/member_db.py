@@ -52,6 +52,7 @@ class MemberDB:
         set_keys = ", ".join(set_parts)
         query = f"UPDATE members SET {set_keys} WHERE id = %s"
         val = list(data.values()) + [id]
+        print(query,val)
         cursor.execute(query,val)
         conn.commit()
         changed = cursor.rowcount > 0
@@ -61,10 +62,20 @@ class MemberDB:
             raise ValueError
         return changed
 
-
-
     def deactivate_member(self,id):
-        pass
+        conn = conn1.get_connection()
+        cursor = conn.cursor(dictionary=True)
+        query = "UPDATE members SET is_active = FALSE WHERE id = %s"
+        cursor.execute(query,(id,))
+        conn.commit()
+        changed = cursor.rowcount > 0
+        conn.close()
+        cursor.close()
+        if not changed:
+            raise ValueError
+        return changed
+
+
     def activate_member(self,id):
         pass
     def increment_borrows(self,id):
@@ -73,3 +84,11 @@ class MemberDB:
         pass
     def get_top_member(self):
         pass
+
+
+
+if __name__ == "__main__":
+    c1 = MemberDB()
+    # print(c1.create_member({"name":"avi","email":"hsgfhsf"}))
+    # print(c1.update_member(1,{"is_active":False}))
+    print(c1.deactivate_member(6))
