@@ -137,10 +137,10 @@ class BookDB:
         cursor = conn.cursor(dictionary=True)
         query = "SELECT COUNT(id) AS count FROM books WHERE genre = %s"
         cursor.execute(query,(genre,))
-        books = cursor.fetchall()
+        books = cursor.fetchone()
         conn.close()
         cursor.close()
-        return books
+        return {"Genre":genre,"COUNT":books["count"]}
         
         
     def count_borrowed_books(self):
@@ -165,6 +165,6 @@ if __name__ == "__main__":
     # print(c1.count_borrowed_books(6))
     # print(c1.set_available(2,False,6))
     # print(c1.count_available())
-    # print(c1.count_by_genre("Non-Fiction"))
-    print(c1.count_borrowed_books())
+    print(c1.count_by_genre("Non-Fiction"))
+    # print(c1.count_borrowed_books())
     # print(c1.count_total_books()[0]["number_of_books"])
